@@ -176,12 +176,39 @@ This turns analytics into **prioritized, actionable decisions**.
 ## 📁 Repository Structure
 Edtech-SaaS-Retention-Analysis/
 │
-├── data/ # Final CSV outputs
-├── data_generation/ # Synthetic data simulation
-├── sql/ # Schema, ingestion & analytics
-├── ml/ # ML pipeline & model notes
-├── docs/ # Assumptions & business context
-└── README.md
+├── README.md                  # Executive project overview
+├── requirements.txt
+│
+├── data/
+│   ├── raw/                   # Raw/generated CSVs
+│   │   ├── users.csv
+│   │   └── usage_events.csv
+│   │
+│   └── processed/
+│       └── churn_risk_scored_users.csv
+│
+├── data_generation/
+│   ├── generate_users.py
+│   ├── generate_usage_events.py
+│   └── README.md
+│
+├── sql/
+│   ├── schema.sql
+│   ├── load_data.sql
+│   └── complete_sql_queries.sql
+│
+├── ml/
+│   ├── risk_scoring.ipynb
+│   ├── model_notes.md
+│   ├── README.md
+│   └── images/
+│       └── churn_risk_table.png
+│
+└── docs/
+    ├── ASSUMPTIONS.md
+    ├── CHURN_DEFINITION.md
+    └── BUSINESS_DECISIONS.md
+
 
 ---
 
