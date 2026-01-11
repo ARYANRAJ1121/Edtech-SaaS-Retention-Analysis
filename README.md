@@ -1,189 +1,183 @@
-📊 EdTech SaaS Retention & Churn Risk Analysis
-Overview
+# 📊 Early Churn Risk Detection in an EdTech SaaS
 
-User churn in EdTech SaaS platforms rarely happens abruptly — it is usually preceded by gradual disengagement.
-The real challenge is not identifying users who have already churned, but detecting early churn risk while intervention is still possible.
+> **From raw usage events → churn risk scores → retention decisions**
 
-This project builds an end-to-end retention intelligence system that combines:
+This project builds an **end-to-end retention intelligence system** for a B2C EdTech SaaS, designed to **identify users at risk of churn *before* they leave**.
 
-Behavioral analytics using PostgreSQL & SQL
+Instead of static churn reports, the system produces **user-level churn risk scores** that can be acted on immediately.
 
-Feature engineering grounded in user activity
+---
 
-Interpretable machine learning–based churn risk scoring
+## 🚀 Why This Matters (30-second view)
 
-The final output enables proactive retention decision-making, not just retrospective reporting.
+- **Users:** 1,500  
+- **Usage events:** 136,000+  
+- **Observed churn rate:** ~13.5%  
+- **Model ROC-AUC:** ~0.85  
 
-Business Problem
+📌 Output: a ranked list of users by churn risk — not just who churned, but **who is likely to churn next**.
 
-Traditional analytics typically answers:
+---
 
-Who churned last month?
+## 🧠 The Core Problem
 
-What is the overall churn rate?
+Most retention dashboards answer:
+- “Who churned last month?”
+- “What is the churn rate?”
 
-These insights are reactive and often arrive too late.
+That’s **too late**.
 
-This project focuses on a more actionable question:
+In real SaaS teams, the real question is:
 
-Which current users are most likely to churn soon, and should be prioritized for retention efforts today?
+> **Which users should we focus on *today* to prevent churn?**
 
-Dataset & Simulation
+This project solves that by combining:
+- SQL-based behavioral analysis (what happened)
+- Interpretable ML risk scoring (what’s likely to happen)
 
-To mirror real SaaS constraints while maintaining reproducibility, user behavior was simulated programmatically.
-
-Users: 1,500
-
-Usage events: 136,000+
-
-Time span: ~9 months of activity
-
-Behavioral realism:
-
-Irregular usage patterns
-
-Engagement decay
-
-Long-tail inactivity
-
-All data generation logic is deterministic and documented.
-
-Churn Definition
-
-A user is labeled as churned if they exhibit no activity for 28 consecutive days.
-
-Why 28 days?
-
-Aligns with monthly learning and subscription cycles
-
-Avoids misclassifying short breaks as churn
-
-Common heuristic in consumer SaaS and EdTech
-
-The churn label is derived purely from behavioral data using SQL window functions — no manual tagging or assumptions.
-
-Technical Architecture
-Python (Data Generation)
-        ↓
-PostgreSQL + SQL (Analytics & Features)
-        ↓
-Machine Learning (Churn Risk Scoring)
-        ↓
-CSV Output for Business Use
-
-1. Data Generation (Python)
-
-Synthetic but realistic user and usage data
-
-Time-aware simulation
-
-Reproducible via fixed random seeds
-
-2. Analytics & Feature Engineering (PostgreSQL)
-
-Cohort retention analysis
-
-Engagement and recency metrics
-
-Leakage-free feature computation using SQL
-
-3. Machine Learning (scikit-learn)
-
-Logistic regression for interpretability
-
-Class imbalance handling
-
-Risk probabilities instead of hard labels
-
-Why Machine Learning?
-
-SQL is excellent for:
-
-Describing past behavior
-
-Defining churn
-
-Measuring engagement
-
-However, SQL alone cannot:
-
-Rank active users by future churn risk
-
-Combine multiple weak behavioral signals
-
-Produce a single actionable prioritization score
-
-Machine learning bridges this gap by converting behavioral signals into a churn risk score — a probability that a user is likely to churn in the near future.
-
-Model Output
-
-The final output is a user-level churn risk dataset, including:
-
-Engagement metrics
-
-Recency and tenure signals
-
-Predicted churn probability
-
-Binary churn label (for validation)
-
-This output can be directly consumed by:
-
-Retention teams
-
-Marketing automation
-
-Experimentation pipelines (A/B testing)
-
-Results (High-Level)
-
-Churn rate: ~13–14%
-
-ROC-AUC: ~0.85
-
-High recall for churned users, prioritizing early detection
-
-Model behavior aligns with domain intuition:
-
-Longer inactivity → higher churn risk
-
-Strong daily engagement → lower churn risk
-
-Detailed modeling rationale is documented in ml/model_notes.md.
-
-Repository Structure
+---
 Edtech-SaaS-Retention-Analysis/
 │
-├── data/                 # Final CSV datasets
-├── data_generation/      # Python data simulation
-├── sql/                  # Schema, loading, analytics queries
-├── ml/                   # ML pipeline, notebooks, model notes
-├── docs/                 # Assumptions & business context
-├── requirements.txt
+├── data/ # Final CSV outputs
+├── data_generation/ # Synthetic data generation
+├── sql/ # Schema & analytics queries
+├── ml/ # Risk scoring model
+├── docs/ # Assumptions & decisions
+└── README.md
+---
+
+## 📂 Dataset Overview
+
+| Component | Description |
+|--------|------------|
+| Users | Signup date, acquisition channel, country |
+| Usage events | Daily sessions per user |
+| Time span | ~9 months |
+| Behavior patterns | Engagement decay, inactivity gaps |
+
+All data is **synthetically generated but behaviorally realistic** and fully reproducible.
+
+---
+
+## 🔍 Churn Definition (Ground Truth)
+
+A user is marked as **churned** if they have **no activity for 28 consecutive days**.
+
+Why 28 days?
+- Matches monthly learning cycles
+- Avoids misclassifying short breaks
+- Common heuristic in consumer SaaS
+
+This label is derived **purely via SQL**, using window functions — no manual assumptions.
+
+---
+
+## 📐 Feature Engineering (SQL)
+
+Features are computed in PostgreSQL to ensure transparency:
+
+- **days_since_last_activity** → recency
+- **active_days** → tenure & habit formation
+- **avg_sessions_per_day** → engagement intensity
+
+⚠️ No future data leakage  
+⚠️ No hand-crafted labels
+
+---
+
+## 🤖 Machine Learning (Why & How)
+
+### Why ML?
+SQL is excellent for analysis, but it cannot:
+- Rank active users by future churn risk
+- Combine weak signals into one decision score
+
+ML converts multiple behavioral signals into a **single churn probability per user**.
+
+### Model Choice
+- **Logistic Regression**
+- Interpretable coefficients
+- Probabilistic output
+- Suitable for business decision-making
+
+---
+
+## 📊 Model Performance
+
+| Metric | Value |
+|------|------|
+| ROC-AUC | ~0.85 |
+| Recall (churned users) | High |
+| Accuracy | De-emphasized (imbalanced data) |
+
+The model prioritizes **catching at-risk users early**, not cosmetic accuracy.
+
+---
+
+## 🧮 What Is a Churn Risk Score?
+
+A churn risk score is:
+
+> **The estimated probability that a user will churn soon, given their current behavior.**
+
+Example:
+- User A → 0.12 (low risk)
+- User B → 0.78 (high risk)
+
+---
+
+## 🏢 Real-World Usage Example
+
+Imagine a retention team with capacity to contact only **10% of users**:
+
+| User | Risk Score | Action |
+|----|-----------|-------|
+| 1489 | 0.82 | Personal outreach |
+| 652 | 0.74 | Discount / reminder |
+| 951 | 0.61 | Engagement nudge |
+| 1272 | 0.08 | No action |
+
+This turns analytics into **prioritized action**.
+
+---
+
+## 📁 Repository Structure
+Edtech-SaaS-Retention-Analysis/
+│
+├── data/ # Final CSV outputs
+├── data_generation/ # Synthetic data generation
+├── sql/ # Schema & analytics queries
+├── ml/ # Risk scoring model
+├── docs/ # Assumptions & decisions
 └── README.md
 
-Key Takeaways
+---
 
-Retention problems are prediction + prioritization problems, not just reporting problems
+## 🧠 Key Takeaways
 
-Interpretable ML often outperforms complex models in business settings
+- Retention is a **prediction + prioritization** problem
+- Interpretable ML often beats complex models in practice
+- Clean SQL → ML handoff is critical in real systems
+- Risk scores enable **proactive**, not reactive, retention
 
-Clean SQL → ML handoffs are critical in real analytics systems
+---
 
-Churn risk scores enable proactive, not reactive, retention strategies
+## 🔮 Possible Extensions
 
-Next Extensions
+- Pricing & plan features
+- Content-level engagement
+- Rolling retraining
+- Intervention A/B testing
 
-Possible future improvements:
+---
 
-Pricing and plan-level features
+## 👤 Author
 
-Content-level engagement signals
+**Aryan Raj**  
+Computer Science Undergraduate | Data Analytics & Applied ML  
+Focused on business-aligned analytics systems
 
-Rolling-window retraining
 
-Intervention effectiveness via A/B testing
 
-Aryan Raj
-Computer Science Undergraduate | Data Analytics & Applied ML
-Focused on building business-aligned analytics systems
+## 🧩 End-to-End Architecture
+
