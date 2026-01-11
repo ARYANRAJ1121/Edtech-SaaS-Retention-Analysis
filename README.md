@@ -174,43 +174,46 @@ This turns analytics into **prioritized, actionable decisions**.
 ---
 
 ## 📁 Repository Structure
+This project follows a production-style analytics pipeline:
+
+- **Data Simulation** → Synthetic EdTech user behavior
+- **SQL Analytics** → Feature engineering & churn logic
+- **ML Modeling** → Churn risk prediction
+- **Outputs** → ML-ready datasets & scores
+
 Edtech-SaaS-Retention-Analysis/
-│
-├── README.md                  # Executive project overview
-├── requirements.txt
-│
-├── data/
-│   ├── raw/                   # Raw/generated CSVs
-│   │   ├── users.csv
-│   │   └── usage_events.csv
-│   │
-│   └── processed/
-│       └── churn_risk_scored_users.csv
-│
-├── data_generation/
-│   ├── generate_users.py
-│   ├── generate_usage_events.py
-│   └── README.md
-│
-├── sql/
-│   ├── schema.sql
-│   ├── load_data.sql
-│   └── complete_sql_queries.sql
-│
-├── ml/
-│   ├── risk_scoring.ipynb
-│   ├── model_notes.md
-│   ├── README.md
-│   └── images/
-│       └── churn_risk_table.png
-│
-└── docs/
-    ├── ASSUMPTIONS.md
-    ├── CHURN_DEFINITION.md
-    └── BUSINESS_DECISIONS.md
+├── data/                # Raw & processed datasets
+├── data_generation/     # Synthetic data simulation
+├── sql/                 # Schema, ingestion & analytics
+├── ml/                  # Churn risk modeling (ML)
+├── docs/                # Business assumptions & context
+└── README.md
+<details>
+<summary><b>Detailed Folder Breakdown</b></summary>
 
+### data/
+- raw/ → generated users & usage events  
+- processed/ → ML-ready churn risk dataset
 
----
+### data_generation/
+- Python scripts to simulate realistic EdTech behavior
+
+### sql/
+- schema.sql → table definitions  
+- load_data.sql → CSV ingestion  
+- complete_sql_queries.sql → analytics & feature engineering
+
+### ml/
+- risk_scoring.ipynb → interpretable churn model  
+- model_notes.md → interview-ready ML explanation  
+- images/ → diagrams used in README
+
+### docs/
+- ASSUMPTIONS.md  
+- CHURN_DEFINITION.md  
+- BUSINESS_DECISIONS.md
+
+</details>
 
 ## 🧠 Key Takeaways
 
