@@ -49,57 +49,6 @@ This project addresses that gap by:
 
 ## 🧩 System Architecture
 
-# 📊 Early Churn Risk Detection in an EdTech SaaS
-
-> **From raw usage events → churn risk scores → retention decisions**
-
-This project builds an **end-to-end retention intelligence system** for an EdTech SaaS platform.  
-It combines **SQL-based behavioral analytics** with **interpretable machine learning** to proactively identify users at risk of churn.
-
-Instead of asking *“Who churned last month?”*, this system answers:
-
-> **“Which users are most likely to churn next — and should be prioritized today?”**
-
----
-
-## 🚀 At a Glance
-
-| Metric | Value |
-|------|------|
-| Users | 1,500 |
-| Usage Events | 136,000+ |
-| Time Span | ~9 months |
-| Observed Churn Rate | ~13.5% |
-| ML Model | Logistic Regression |
-| ROC-AUC | **~0.85** |
-| Output | User-level churn risk scores |
-
-📌 **Final Deliverable:**  
-A ranked list of users by churn risk probability — ready for retention action.
-
----
-
-## 🧠 Why This Project Exists
-
-Most churn analytics are **reactive**:
-- Monthly churn rate
-- Users who already left
-- Lagging indicators
-
-In real SaaS teams, the real problem is **prioritization**:
-
-> Retention teams can’t act on everyone —  
-> **so who should they focus on first?**
-
-This project addresses that gap by:
-- Defining churn rigorously using SQL
-- Engineering behavioral features at scale
-- Using ML only where it adds real value: **risk ranking**
-
----
-
-## 🧩 System Architecture
-
 Python (Data Simulation)
 ↓
 PostgreSQL (SQL Analytics & Feature Engineering)
