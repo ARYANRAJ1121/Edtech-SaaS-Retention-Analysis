@@ -1,240 +1,176 @@
-# 📊 Early Churn Risk Detection in an EdTech SaaS
+# Nexus Retention Intelligence
 
-> **From raw usage events → churn risk scores → retention decisions**
+Nexus Retention Intelligence is an end-to-end EdTech retention analytics project that combines synthetic product telemetry, SQL-based churn logic, machine learning risk scoring, and lightweight AI-assisted intervention workflows.
 
-This project builds an **end-to-end retention intelligence system** for an EdTech SaaS platform.  
-It combines **SQL-based behavioral analytics** with **interpretable machine learning** to proactively identify users at risk of churn.
+The repository is organized around two complementary execution paths:
 
-Instead of asking *“Who churned last month?”*, this system answers:
+- `Classic pipeline`: a streamlined churn analytics workflow built on generated user/session data, SQL feature engineering, XGBoost scoring, and a Streamlit dashboard.
+- `MAARS pipeline`: an advanced simulation layer with richer telemetry, behavioral features, a scored SQLite warehouse, a Streamlit command center, a live event simulator, and a FastAPI inference API.
 
-> **“Which users are most likely to churn next — and should be prioritized today?”**
+## Highlights
 
----
+- End-to-end churn scoring workflow from synthetic data generation to dashboard consumption
+- Two modeling layers: a classic retention-scoring path and a richer event-driven MAARS path
+- Explainable predictions using SHAP-based churn driver attribution
+- Natural-language SQL exploration through an LLM-assisted analytics agent
+- Live event simulation for real-time risk recalculation and intervention triggering
+- Streamlit dashboards for both executive analytics and interactive experimentation
 
-## 🚀 At a Glance
+## Architecture
 
-| Metric | Value |
-|------|------|
-| Users | 1,500 |
-| Usage Events | 136,000+ |
-| Time Span | ~9 months |
-| Observed Churn Rate | ~13.5% |
-| ML Model | Logistic Regression |
-| ROC-AUC | **~0.85** |
-| Output | User-level churn risk scores |
+### Classic Pipeline
 
-📌 **Final Deliverable:**  
-A ranked list of users by churn risk probability — ready for retention action.
+1. Generate synthetic users and usage events
+2. Define churn and derive features through SQL
+3. Train an XGBoost churn model
+4. Export scored users and model artifacts
+5. Review results in the classic Streamlit dashboard
 
----
+### MAARS Pipeline
 
-## 🧠 Why This Project Exists
+1. Generate detailed event telemetry and behavioral features
+2. Persist feature tables and scored outputs to SQLite and CSV
+3. Train the advanced XGBoost model with SHAP explanations
+4. Query scored users through the MAARS command center
+5. Simulate live events and trigger real-time re-scoring via Streamlit or FastAPI
 
-Most churn analytics are **reactive**:
-- Monthly churn rate
-- Users who already left
-- Lagging indicators
+## Technology Stack
 
-In real SaaS teams, the real problem is **prioritization**:
+- `Python`
+- `Pandas`, `NumPy`
+- `XGBoost`
+- `SHAP`
+- `SQLite`
+- `Streamlit`
+- `FastAPI`
+- `Plotly`
+- `Groq API` for optional LLM-assisted features
 
-> Retention teams can’t act on everyone —  
-> **so who should they focus on first?**
+## Repository Structure
 
-This project addresses that gap by:
-- Defining churn rigorously using SQL
-- Engineering behavioral features at scale
-- Using ML only where it adds real value: **risk ranking**
-
----
-
-## 🧩 System Architecture
-
-Python (Data Simulation)
-↓
-PostgreSQL (SQL Analytics & Feature Engineering)
-↓
-Machine Learning (Churn Risk Scoring)
-↓
-CSV Output → Retention / Marketing Teams
-
-
-SQL owns the business logic.  
-ML augments it with prioritization.
-
----
-
-## 📂 Dataset Overview
-
-Synthetic but **behaviorally realistic** data was generated to mimic a real EdTech SaaS.
-
-| Component | Description |
-|--------|------------|
-| Users | Signup date, acquisition channel, country |
-| Usage Events | Daily session counts per user |
-| Behavior | Engagement decay, inactivity gaps |
-| Reproducibility | Fully deterministic via Python |
-
----
-
-## 🔍 Churn Definition
-
-A user is labeled as **churned** if they have **no activity for 30 consecutive days**.
-
-Why 30 days?
-- Aligns with monthly learning cycles
-- Avoids misclassifying short breaks
-- Common heuristic in consumer SaaS
-
-Churn labels are derived **purely via SQL window functions** — no manual tagging.
-
----
-
-## 📐 SQL Analytics & Feature Engineering (Core Layer)
-
-PostgreSQL is used as the **primary analytics engine**.
-
-All business logic is consolidated in:
-
-
-### What the SQL pipeline does:
-- User activity lifecycle analysis
-- Retention & engagement profiling
-- Leakage-free churn definition
-- ML-ready feature engineering
-
-### Key features engineered in SQL:
-- `active_days` — tenure & habit strength  
-- `days_since_last_activity` — disengagement signal  
-- `avg_sessions_per_day` — engagement intensity  
-- `total_sessions` — cumulative usage  
-
-This mirrors how real analytics teams prepare data for ML.
-
----
-
-## 🤖 Machine Learning: Churn Risk Scoring
-
-### Why ML?
-SQL explains *what happened*.  
-ML estimates *what is likely to happen next*.
-
-The model converts behavioral signals into a **churn risk probability** for each user.
-
-### Model Choice
-- **Logistic Regression**
-- Interpretable coefficients
-- Probabilistic output
-- Business-aligned decision support
-
-Complex models were intentionally avoided in favor of **trust and explainability**.
-
----
-
-## 📊 Model Performance
-
-| Metric | Value |
-|------|------|
-| ROC-AUC | **~0.85** |
-| Recall (Churned Users) | High |
-| Accuracy | De-emphasized (class imbalance) |
-
-The model prioritizes **early detection of at-risk users**.
-
----
-
-## 🧮 What Is a Churn Risk Score?
-
-A churn risk score represents:
-
-> **The probability that a user will churn in the near future, given current behavior.**
-
-Example:
-
-| User | Risk Score | Interpretation |
-|----|-----------|--------------|
-| User A | 0.12 | Low risk |
-| User B | 0.47 | Medium risk |
-| User C | 0.81 | High risk |
-
----
-
-## 🏢 Real-World Retention Example
-
-If a retention team can act on only **10% of users**:
-
-| User ID | Risk Score | Action |
-|------|-----------|--------|
-| 1489 | 0.82 | Personal outreach |
-| 652 | 0.74 | Discount / reminder |
-| 951 | 0.61 | Engagement nudge |
-| 1272 | 0.08 | No action |
-
-This turns analytics into **prioritized, actionable decisions**.
-
----
-
-## 📁 Repository Structure
-This project follows a production-style analytics pipeline:
-
-- **Data Simulation** → Synthetic EdTech user behavior
-- **SQL Analytics** → Feature engineering & churn logic
-- **ML Modeling** → Churn risk prediction
-- **Outputs** → ML-ready datasets & scores
-
+```text
 Edtech-SaaS-Retention-Analysis/
-├── data/                # Raw & processed datasets
-├── data_generation/     # Synthetic data simulation
-├── sql/                 # Schema, ingestion & analytics
-├── ml/                  # Churn risk modeling (ML)
-├── docs/                # Business assumptions & context
-└── README.md
-<details>
-<summary><b>Detailed Folder Breakdown</b></summary>
+|-- app.py                     # Classic Streamlit dashboard
+|-- data/                      # Classic and advanced datasets
+|-- data_generation/           # Classic synthetic data generators
+|-- docs/                      # Assumptions, churn logic, and business notes
+|-- ml/                        # Notebook-era baseline references
+|-- sql/                       # Classic schema and feature engineering SQL
+`-- src/
+    |-- agents/                # SQL and retention agent helpers
+    |-- api/                   # FastAPI event API and RAG engine
+    |-- app/                   # MAARS Streamlit applications
+    |-- core/                  # Shared MAARS event-processing logic
+    |-- data/                  # Advanced telemetry generator
+    |-- models/                # Classic and advanced training scripts
+    `-- utils/                 # Shared path and utility helpers
+```
+## Getting Started
 
-### data/
-- raw/ → generated users & usage events  
-- processed/ → ML-ready churn risk dataset
+### 1. Install Dependencies
 
-### data_generation/
-- Python scripts to simulate realistic EdTech behavior
+```bash
+pip install -r requirements.txt
+```
 
-### sql/
-- schema.sql → table definitions  
-- load_data.sql → CSV ingestion  
-- complete_sql_queries.sql → analytics & feature engineering
+### 2. Configure Environment Variables
 
-### ml/
-- risk_scoring.ipynb → interpretable churn model  
-- model_notes.md → interview-ready ML explanation  
-- images/ → diagrams used in README
+Create a `.env` file if you want to enable LLM-backed features:
 
-### docs/
-- ASSUMPTIONS.md  
-- CHURN_DEFINITION.md  
-- BUSINESS_DECISIONS.md
+```text
+GROQ_API_KEY=your_key_here
+```
 
-</details>
+The project runs without a Groq key, but AI-assisted querying and intervention generation will fall back to offline responses or heuristics.
 
-## 🧠 Key Takeaways
+## Running The Classic Pipeline
 
-- Churn is a **prediction + prioritization** problem
-- SQL should own business logic and feature engineering
-- ML adds value by ranking risk, not by complexity
-- Interpretability beats black-box accuracy in practice
+### Generate source data
 
----
+```bash
+python data_generation/generate_users.py
+python data_generation/generate_usage_events.py
+```
 
-## 🔮 Future Extensions
+### Train and score users
 
-- Pricing / plan-level features
-- Content-level engagement signals
-- Rolling-window retraining
-- Intervention A/B testing
+```bash
+python src/models/train_xgboost.py
+```
 
----
+### Launch the dashboard
 
-## 👤 Author
+```bash
+streamlit run app.py
+```
 
-**Aryan Raj**  
-Computer Science Undergraduate | Data Analytics & Applied ML  
-Focused on building business-aligned analytics systems
+### Primary outputs
+
+- `data/churn_risk_scored_users.csv`
+- `src/models/artifacts/xgboost_model.pkl`
+- `src/models/artifacts/shap_explainer.pkl`
+
+## Running The MAARS Pipeline
+
+### Generate advanced telemetry
+
+```bash
+python src/data/generate_telemetry.py
+```
+
+### Train the advanced model
+
+```bash
+python src/models/train_advanced_xgboost.py
+```
+
+### Launch the MAARS command center
+
+```bash
+streamlit run src/app/main.py
+```
+
+### Launch the live streaming simulator
+
+```bash
+streamlit run src/app/live_dashboard.py
+```
+
+### Run the FastAPI event API
+
+```bash
+python src/api/server.py
+```
+
+### API endpoints
+
+- `GET /health`
+- `POST /track-event`
+
+### Primary outputs
+
+- `data/advanced/advanced_features.csv`
+- `data/advanced/scored_users.csv`
+- `data/advanced/telemetry.db`
+- `src/models/artifacts/maars_model.pkl`
+- `src/models/artifacts/maars_explainer.pkl`
+
+## Machine Learning Notes
+
+- The classic model scores users using retention-oriented behavioral features such as activity recency, active days, and average session intensity.
+- The MAARS model extends this with richer behavioral signals including engagement velocity, frustration, completion behavior, and account value.
+- SHAP explanations are generated for both tracks to surface the strongest churn driver for each scored user.
+
+## AI-Assisted Features
+
+When a Groq API key is configured, the project can:
+
+- translate natural-language questions into SQL over the advanced scored-user warehouse
+- summarize query results into retention-oriented business insights
+- generate lightweight intervention or micro-lesson responses for struggling users
+
+## Project Notes
+
+- The advanced telemetry and churn labels are synthetic by design and intended for demonstration, experimentation, and portfolio use.
+- The `ml/` directory contains earlier notebook-oriented work and supporting notes; the actively maintained runtime flows live in `src/`.
+- The repository is structured to be executable locally without external infrastructure beyond optional API access for LLM features.

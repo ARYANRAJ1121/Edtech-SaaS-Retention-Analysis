@@ -1,0 +1,60 @@
+/* Glassmorphism Dark Mesh Theme */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+/* Main Background */
+.stApp {
+    background-color: #0f172a;
+    background-image: 
+        radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+        radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+        radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+    color: #e2e8f0;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Glass Panels (Metrics, Cards) */
+div[data-testid="metric-container"], .glass-card {
+    background: rgba(30, 41, 59, 0.4) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 16px !important;
+    padding: 20px !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Typography */
+h1, h2, h3 {
+    background: -webkit-linear-gradient(45deg, #f8fafc, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+}
+
+/* Sidebar */
+section[data-testid="stSidebar"] {
+    background: rgba(15, 23, 42, 0.6) !important;
+    backdrop-filter: blur(20px) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Agent Output Box */
+.agent-box {
+    background: rgba(16, 185, 129, 0.1);
+    border-left: 4px solid #10b981;
+    padding: 20px;
+    border-radius: 8px;
+    font-family: monospace;
+    color: #a7f3d0;
+    white-space: pre-wrap;
+}
+
+/* Warning Box for high risk */
+.high-risk-box {
+    background: rgba(239, 68, 68, 0.1);
+    border-left: 4px solid #ef4444;
+    padding: 15px;
+    border-radius: 8px;
+    color: #fca5a5;
+    margin-bottom: 20px;
+}
